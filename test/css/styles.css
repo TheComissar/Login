@@ -6,8 +6,9 @@ body {
 }
 label {
     display: inline-block;
-    width: 5em;
-    text-align: right;
+    text-align: left;
+    font-size: 13px;
+    font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 #create label {
     width: 10em;
@@ -18,10 +19,13 @@ label[for=remember] {
 label[for=color] {
     display: inline;
     width: auto;
-    text-align: left;
 }
-#register {
-    margin-left: 12.5em;
+input{
+    color: inherit;
+    background: #fff;
+    border: 1px solid #e7eaec;
+    border-radius: 3px;
+    padding: 6px 12px;
 }
 #revalidate {
     margin-left: 6.5em;

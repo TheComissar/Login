@@ -45,7 +45,7 @@ class AutoLogin
     /**
      * @var int Number of days the autologin cookie remains valid
      */
-    protected $lifetimeMinutes = 1;
+    protected $lifetimeMinutes = 15;
 
     /**
      * @var int Unix timestamp for when the cookie expires

@@ -2,7 +2,8 @@
 $errors = [];
 if (isset($_POST['register'])) {
     require_once './includes/db_connect.php';
-    $expected = ['username', 'pwd', 'confirm'];
+    $expected = ['username', 'pwd', 'confirm', 'email', 'phone', 'company', 'site_reference'];
+    print_r($_POST);
     // Assign $_POST variables to simple variables and check all fields have values
     foreach ($_POST as $key => $value) {
         if (in_array($key, $expected)) {
@@ -28,13 +29,17 @@ if (isset($_POST['register'])) {
                 try {
                     // Generate a random 8-character user key and insert values into the database
                     $user_key = hash('crc32', microtime(true) . mt_rand() . $username);
-                    $sql = 'INSERT INTO users (user_key, username, pwd)
-                            VALUES (:key, :username, :pwd)';
+                    $sql = 'INSERT INTO users (user_key, username, pwd, email, phone, company, site_reference)
+                            VALUES (:key, :username, :pwd, :email, :phone, :company, :site_reference)';
                     $stmt = $db->prepare($sql);
+
                     $stmt->bindParam(':key', $user_key);
                     $stmt->bindParam(':username', $username);
-                    // Store an encrypted version of the password
                     $stmt->bindValue(':pwd', password_hash($pwd, PASSWORD_DEFAULT));
+                    $stmt->bindParam(':email', $email);
+                    $stmt->bindParam(':phone', $phone);
+                    $stmt->bindParam(':company', $company);
+                    $stmt->bindParam(':site_reference', $site_reference);
                     $stmt->execute();
                 } catch (\PDOException $e) {
                     if (0 === strpos($e->getCode(), '23')) {
@@ -59,16 +64,18 @@ if (isset($_POST['register'])) {
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Create Account</title>
+    <meta charset="utf-8">
+    <title>Designate Account</title>
     <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 
 <body id="create">
-<h1>Create Account</h1>
+<h1>Register</h1>
+<h4>Create new account.</h4>
+<hr>
 <form action="<?= $_SERVER['PHP_SELF']; ?>" method="post">
     <p>
-        <label for="username">Username:</label>
+        <label for="username">Username</label><br>
         <input type="text" name="username" id="username"
         <?php
         if (isset($username) && !isset($errors['username'])) {
@@ -84,7 +91,7 @@ if (isset($_POST['register'])) {
         ?>
     </p>
     <p>
-        <label for="pwd">Password:</label>
+        <label for="pwd">Password</label><br>
         <input type="password" name="pwd" id="pwd">
         <?php
         if (isset($errors['pwd'])) {
@@ -93,7 +100,7 @@ if (isset($_POST['register'])) {
         ?>
     </p>
     <p>
-        <label for="confirm">Confirm Password:</label>
+        <label for="confirm">Confirm Password</label><br>
         <input type="password" name="confirm" id="confirm">
         <?php
         if (isset($errors['confirm'])) {
@@ -104,7 +111,43 @@ if (isset($_POST['register'])) {
         ?>
     </p>
     <p>
-        <input type="submit" name="register" id="register" value="Create Account">
+        <label for="email">Email</label><br>
+        <input type="email" name="email" id="email">
+        <?php
+        if (isset($errors['email'])) {
+            echo $errors['email'];
+        }
+        ?>
+    </p>
+    <p>
+        <label for="phone">Phone</label><br>
+        <input type="phone" name="phone" id="phone">
+        <?php
+        if (isset($errors['phone'])) {
+            echo $errors['phone'];
+        }
+        ?>
+    </p>
+    <p>
+        <label for="company">Company</label><br>
+        <input type="company" name="company" id="company">
+        <?php
+        if (isset($errors['company'])) {
+            echo $errors['company'];
+        }
+        ?>
+    </p>
+    <p>
+        <label for="site_reference">Site Reference</label><br>
+        <input type="site_reference" name="site_reference" id="site_reference">
+        <?php
+        if (isset($errors['site_reference'])) {
+            echo $errors['site_reference'];
+        }
+        ?>
+    </p>
+    <p>
+        <input type="submit" name="register" id="register" value="Register">
     </p>
 </form>
 </body>

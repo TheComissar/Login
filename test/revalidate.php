@@ -7,7 +7,7 @@ use Foundationphp\Sessions\AutoLogin;
 if (!isset($_SESSION['invalid'])) {
     $_SESSION['invalid'] = 0;
 }
-$max_attempts = 2;
+$max_attempts = 5;
 
 if (isset($_POST['revalidate'])) {
     $username = trim($_POST['username']);
